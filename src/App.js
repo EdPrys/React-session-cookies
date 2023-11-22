@@ -1,24 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import WelcomePage from "./WelcomePage.js";
+import LoginPage from "./LoginPage.js";
+import { CookiesProvider, useCookies } from "react-cookie";
 
 function App() {
+  const [cookies, setCookie] = useCookies(["user"]);
+
+  function handleLogin(user) {
+    setCookie("user", user, { path: "/" });
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <CookiesProvider>
+      <div>
+        {cookies.user ? (
+          <WelcomePage user={cookies.user} />
+        ) : (
+          <LoginPage onLogin={handleLogin} />
+        )}
+      </div>
+    </CookiesProvider>
   );
 }
 
